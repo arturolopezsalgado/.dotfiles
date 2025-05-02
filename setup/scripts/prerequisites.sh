@@ -126,3 +126,18 @@ install_homebrew() {
 
     success "Homebrew installed successfully"
 }
+
+# Main function
+install_prerequisites() {
+    info "Starting macOS prerequisites setup..."
+
+    # Detect Mac architecture
+    detect_architecture
+
+    # Run installation steps
+    install_xcode
+    install_homebrew
+
+    success "Prerequisites setup completed successfully!"
+    info "You can now install packages using 'brew install <package>'"
+}

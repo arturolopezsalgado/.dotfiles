@@ -15,12 +15,9 @@ readonly DOTFILES_DIR="$(cd "$SCRIPT_DIR/../home" && pwd)"
 . "$SCRIPT_DIR/scripts/homebrew.sh"
 
 echo "Setting up the Mac..."
-echo "Running prerequisites script..."
 
-# Run prerequisites
-detect_architecture
-install_xcode
-install_homebrew
+# Install prerequisites
+install_prerequisites
 
 echo -n "Overwrite existing dotfiles? [y/n] "
 read overwrite_dotfiles
