@@ -16,10 +16,10 @@ detect_architecture() {
     arch="$(uname -m)"
 
     if [[ "$arch" == "arm64" ]]; then
-        info "Detected Apple Silicon (ARM) Mac"
+        info "Architecture detected Apple Silicon (ARM) Mac"
         readonly IS_ARM=true
     elif [[ "$arch" == "x86_64" ]]; then
-        info "Detected Intel Mac"
+        info "Architecture detected Intel Mac"
         readonly IS_ARM=false
     else
         error "Unsupported architecture: $arch"
