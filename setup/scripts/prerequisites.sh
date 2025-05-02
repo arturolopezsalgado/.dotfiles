@@ -51,3 +51,63 @@ install_xcode() {
 
     success "Xcode Command Line Tools installed successfully"
 }
+
+# Install Homebrew
+install_homebrew() {
+    info "Installing Homebrew package manager..."
+
+    # Set default Homebrew installation options
+    export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+    export HOMEBREW_NO_ANALYTICS=1  # Respect privacy by disabling analytics
+
+    # Check if already installed
+    if hash brew &>/dev/null; then
+        warning "Homebrew is already installed"
+
+        # Update Homebrew to ensure it's current
+        info "Updating Homebrew..."
+        brew update
+        success "Homebrew updated successfully"
+        return 0
+    fi
+
+    # Validate sudo credentials before running installer
+    info "Preparing for installation (may require password)..."
+    sudo --validate
+
+    # Run Homebrew installer
+    info "Running Homebrew installer (this may take a while)..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add Homebrew to PATH for ARM Macs if needed
+    if [[ "${IS_ARM:-false}" == true ]]; then
+        if [[ -d "/opt/homebrew/bin" ]]; then
+            info "Configuring Homebrew PATH for Apple Silicon..."
+
+            # Check which shell the user is using
+            local shell_profile
+            case "$SHELL" in
+                */zsh)
+                    shell_profile="$HOME/.zprofile"
+                    ;;
+                */bash)
+                    shell_profile="$HOME/.bash_profile"
+                    ;;
+                *)
+                    shell_profile="$HOME/.profile"
+                    ;;
+            esac
+
+            # Add Homebrew to PATH if not already there
+            if ! grep -q "/opt/homebrew/bin" "$shell_profile" 2>/dev/null; then
+                echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$shell_profile"
+                info "Added Homebrew to your $shell_profile"
+            fi
+
+            # Set for current session
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+    fi
+
+    success "Homebrew installed successfully"
+}
