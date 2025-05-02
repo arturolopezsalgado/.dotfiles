@@ -26,3 +26,28 @@ detect_architecture() {
         exit 1
     fi
 }
+
+# Install Xcode Command Line Tools
+# These are required for Git, Homebrew, and other development tools
+install_xcode() {
+    info "Installing Apple's Command Line Tools (prerequisite for Git and Homebrew)..."
+
+    # Check if already installed
+    if xcode-select -p &>/dev/null; then
+        warning "Xcode Command Line Tools are already installed"
+        return 0
+    fi
+
+    # Start installation
+    xcode-select --install
+
+    # Prompt user to complete installation
+    echo "A dialog box should have appeared to install the Command Line Tools."
+    echo "Please complete the installation and press Enter to continue..."
+    read -r
+
+    # Accept license
+    sudo xcodebuild -license accept
+
+    success "Xcode Command Line Tools installed successfully"
+}
