@@ -17,12 +17,13 @@
 # Exit on error, undefined variables, and propagate errors in pipelines
 set -euo pipefail
 
-# Get the absolute path of the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Get parent directory of the script
+# This is useful for sourcing other scripts or utilities
+# without hardcoding paths
+PARENT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-# Source our colors utility script
-# shellcheck source=./colors.sh
-. "$SCRIPT_DIR/../utils/colors.sh"
+# Source the colors utility script
+. "$PARENT_DIR/utils/colors.sh"
 
 # Detect Mac architecture
 detect_architecture() {
