@@ -93,13 +93,13 @@ warning() {
 }
 
 # Check if script is being sourced or executed directly
-if [[ "$0" == "${0}" ]]; then
-    # Script was executed directly, show usage example
-    echo "Color utility functions:"
-    info "This is an information message (blue)"
-    success "This is a success message (green)"
-    error "This is an error message (red)"
-    warning "This is a warning message (yellow)"
-    echo -e "\nTo use these functions in your scripts:"
-    echo "  source $(basename "$0")"
-fi
+# if [[ "${(%):-%N}" == "$0" ]]; then
+#     # Script was executed directly, show usage example
+#     echo "Color utility functions:"
+#     info "This is an information message (blue)"
+#     success "This is a success message (green)"
+#     error "This is an error message (red)"
+#     warning "This is a warning message (yellow)"
+#     echo -e "\nTo use these functions in your scripts:"
+#     echo "  source $(basename "$0")"
+# fi
