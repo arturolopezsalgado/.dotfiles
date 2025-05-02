@@ -1,4 +1,18 @@
 #!/usr/bin/env zsh
+#
+# Mac Development Environment Setup Script
+#
+# This script automates the setup of a development environment on macOS.
+# It detects the Mac architecture (Intel or Apple Silicon), installs Xcode
+# Command Line Tools, and sets up Homebrew package manager with appropriate
+# configurations based on the detected architecture.
+#
+# The script uses strict error handling and includes helper functions for
+# architecture detection and installation of required development tools.
+#
+# Dependencies:
+#   - colors.sh utility script for terminal output formatting
+#
 
 # Exit on error, undefined variables, and propagate errors in pipelines
 set -euo pipefail
