@@ -13,7 +13,6 @@ readonly DOTFILES_DIR="$(cd "$SCRIPT_DIR/../home" && pwd)"
 . "$SCRIPT_DIR/utils/colors.sh"
 . "$SCRIPT_DIR/utils/steps.sh"
 . "$SCRIPT_DIR/scripts/prerequisites.sh"
-. "$SCRIPT_DIR/scripts/homebrew.sh"
 
 echo "Setting up the Mac..."
 

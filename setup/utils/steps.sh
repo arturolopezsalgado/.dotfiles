@@ -4,6 +4,17 @@
 # Exit on error, undefined variables, and propagate errors in pipelines
 set -euo pipefail
 
+
+# Install GNU stow if not installed
+install_gnu_stow() {
+    if ! command -v stow &> /dev/null; then
+        echo "Installing GNU Stow..."
+        brew install stow
+    else
+        warning "GNU Stow is already installed."
+    fi
+}
+
 overwrite_dotfiles() {
     echo -n "Overwrite existing dotfiles? [y/n] "
     read overwrite_dotfiles
