@@ -19,6 +19,7 @@ echo "Setting up the Mac..."
 # Installation steps
 install_prerequisites
 overwrite_dotfiles
+install_brew_bundle
 
 
 echo "Setup complete"

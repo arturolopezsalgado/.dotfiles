@@ -41,3 +41,28 @@ overwrite_dotfiles() {
         echo "Keeping existing dotfiles."
     fi
 }
+
+# Run brew bundle
+install_brew_bundle() {
+    echo -n "Run brew bundle? [y/n] "
+    read run_brew_bundle
+
+    brewfile=$DOTFILES_DIR/.config/homebrew/Brewfile
+    echo "Brewfile path: $brewfile"
+    if [[ "$run_brew_bundle" == "y" ]]; then
+        # verify homebrew is installed
+        if ! command -v brew &> /dev/null; then
+            error "Homebrew is not installed. Please install Homebrew first."
+            exit 1
+        fi
+        # Run the brew bundle command
+        echo "Running brew bundle..."
+        brew bundle --file="$brewfile" || {
+            error "Failed to run brew bundle"
+            exit 1
+        }
+        success "Brew bundle installed successfully"
+    else
+        echo "Skipping brew bundle."
+    fi
+}
