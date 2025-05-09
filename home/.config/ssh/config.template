@@ -1,0 +1,25 @@
+# SSH Configuration Template
+# This file is tracked in the dotfiles repository
+# Sensitive information should be placed in config.local which is not tracked
+
+# Include private configuration if it exists
+Include config.local
+
+# Default settings for all hosts
+Host *
+    AddKeysToAgent yes
+    IdentityFile ~/.config/ssh/id_ed25519
+    IdentityFile ~/.config/ssh/id_rsa
+    
+    # Security settings
+    Protocol 2
+    HashKnownHosts yes
+    StrictHostKeyChecking ask
+    
+    # Connection settings
+    ServerAliveInterval 60
+    ServerAliveCountMax 30
+    
+    # Use compression for slow connections
+    # Uncomment if needed
+    # Compression yes

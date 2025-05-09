@@ -1,0 +1,17 @@
+# theme = Snazzy Soft
+# theme = tokyonight
+# theme = Desert
+# theme = OneHalfDark
+theme = catppuccin-mocha
+
+# background = 282c34
+# background-opacity = 0.9
+# background-blur-radius = 8
+clipboard-trim-trailing-spaces = true
+confirm-close-surface = false
+copy-on-select = clipboard
+font-size = 16
+macos-option-as-alt = false
+mouse-hide-while-typing = true
+window-width = 143
+window-height = 50

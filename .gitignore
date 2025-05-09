@@ -1,0 +1,33 @@
+# Ignore personalized config files
+home/.config/git/config-personal
+home/.config/git/config-work
+
+# SSH - Ignore sensitive files but track SSH config templates
+home/.config/ssh/*
+!home/.config/ssh/config.template
+!home/.config/ssh/config
+
+# Ignore template-generated files
+home/.config/**/*.generated
+home/.config/**/*.local
+
+# Ignore backup files
+*.bak
+*.backup
+*.old
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor/IDE files
+.vscode/*
+!.vscode/mcp.json
+*.swp
+*~
+
+# Backups created by dotfiles scripts
+setup/backups/
+
+deprecated

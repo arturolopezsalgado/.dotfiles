@@ -1,0 +1,30 @@
+Great job moving the `show_post_install_notes` function to the steps.sh file!
+
+Now that you've successfully moved this function, you can run:
+
+```bash
+zsh /Users/trxmac/.dotfiles/setup/make_scripts_executable.sh
+```
+
+This will make all scripts executable, and then you can run:
+
+```bash
+./setup/install.sh
+```
+
+The installation will now follow a logical process:
+1. Install prerequisites
+2. Set up dotfiles with GNU stow
+3. Set up SSH configuration with custom key names
+4. Install packages with Homebrew
+5. Show post-installation notes
+
+The post-install notes will display reminders about:
+- Adding your new SSH keys to GitHub
+- Setting up app permissions
+- Creating browser profiles
+- Customizing your terminal
+- Configuring your editor
+- Additional system customizations
+
+These changes improve organization by keeping all installation step functions in the steps.sh file, making your code more modular and easier to maintain.

@@ -1,0 +1,23 @@
+# OS generated files
+.DS_Store
+./.DS_Store
+
+# Environments
+.venv/
+.vscode/
+
+# Secrets and credentials
+.env
+.secrets
+
+# AI
+.qodo
+.claude
+.cursor
+
+# .ignore
+.ignore
+
+# Python artifacts
+*.pyc
+__pycache__/

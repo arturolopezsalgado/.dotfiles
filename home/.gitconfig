@@ -1,0 +1,17 @@
+# Main Git configuration
+
+[core]
+    excludesfile = ~/.config/git/.gitignore_global
+    editor = code --wait
+
+# Instead of using a global user, using context-specific configs
+# based on the repository location
+
+[includeIf "gitdir:~/dev/Personal/"]
+  path = ~/.config/git/config-personal
+
+[includeIf "gitdir:~/dev/Work/"]
+  path = ~/.config/git/config-work
+
+[init]
+    templateDir = ~/.config/git/.git-template

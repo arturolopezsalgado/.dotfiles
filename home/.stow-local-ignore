@@ -1,0 +1,21 @@
+# Files and patterns to be ignored by GNU Stow
+# See: https://www.gnu.org/software/stow/manual/stow.html#Ignore-Lists
+
+# Default ignore patterns
+^/README.*
+^/\.git
+^/\.gitignore
+^/\.stow-local-ignore
+
+# SSH private and machine-specific files
+\.config/ssh/id_rsa
+\.config/ssh/id_rsa\.pub
+\.config/ssh/id_ed25519
+\.config/ssh/id_ed25519\.pub
+\.config/ssh/id_ecdsa
+\.config/ssh/id_ecdsa\.pub
+\.config/ssh/id_dsa
+\.config/ssh/id_dsa\.pub
+\.config/ssh/known_hosts
+\.config/ssh/authorized_keys
+\.config/ssh/config\.local

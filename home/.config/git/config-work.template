@@ -1,0 +1,7 @@
+# Work
+[user]
+  name = __WORK_NAME__
+  email = __WORK_EMAIL__
+
+[credential]
+  username = "__WORK_GITHUB__"

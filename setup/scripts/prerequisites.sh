@@ -1,14 +1,15 @@
 #!/usr/bin/env zsh
 #
-# Mac Development Environment Setup Script
+# Mac Development Environment Prerequisites Script
 #
-# This script automates the setup of a development environment on macOS.
+# This script automates the setup of prerequisites for a development environment on macOS.
 # It detects the Mac architecture (Intel or Apple Silicon), installs Xcode
 # Command Line Tools, and sets up Homebrew package manager with appropriate
 # configurations based on the detected architecture.
 #
-# The script uses strict error handling and includes helper functions for
-# architecture detection and installation of required development tools.
+# Usage (as a sourced script):
+#   source prerequisites.sh
+#   install_prerequisites
 #
 # Dependencies:
 #   - colors.sh utility script for terminal output formatting
@@ -18,12 +19,15 @@
 set -euo pipefail
 
 # Get parent directory of the script
-# This is useful for sourcing other scripts or utilities
-# without hardcoding paths
-PARENT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PARENT_DIR="$(cd "$(dirname "${(%):-%x}")/.." && pwd)"
 
-# Source the colors utility script
-. "$PARENT_DIR/utils/colors.sh"
+# Make sure colors.sh is loaded
+if [[ -z "${COLORS_SH_LOADED:-}" ]]; then
+    source "$PARENT_DIR/utils/colors.sh"
+fi
+
+# Global variables to store architecture info
+IS_ARM=false
 
 # Detect Mac architecture
 detect_architecture() {
@@ -31,11 +35,11 @@ detect_architecture() {
     arch="$(uname -m)"
 
     if [[ "$arch" == "arm64" ]]; then
-        info "Architecture detected Apple Silicon (ARM) Mac"
-        readonly IS_ARM=true
+        info "Architecture detected: Apple Silicon (ARM) Mac"
+        IS_ARM=true
     elif [[ "$arch" == "x86_64" ]]; then
-        info "Architecture detected Intel Mac"
-        readonly IS_ARM=false
+        info "Architecture detected: Intel Mac"
+        IS_ARM=false
     else
         error "Unsupported architecture: $arch"
         exit 1
@@ -45,7 +49,7 @@ detect_architecture() {
 # Install Xcode Command Line Tools
 # These are required for Git, Homebrew, and other development tools
 install_xcode() {
-    info "Installing Apple's Command Line Tools (prerequisite for Git and Homebrew)..."
+    header "Xcode Command Line Tools"
 
     # Check if already installed
     if xcode-select -p &>/dev/null; then
@@ -54,14 +58,16 @@ install_xcode() {
     fi
 
     # Start installation
+    step "Starting Xcode Command Line Tools installation..."
     xcode-select --install
 
     # Prompt user to complete installation
-    echo "A dialog box should have appeared to install the Command Line Tools."
+    note "A dialog box should have appeared to install the Command Line Tools."
     echo "Please complete the installation and press Enter to continue..."
     read -r
 
     # Accept license
+    step "Accepting Xcode license (may require password)..."
     sudo xcodebuild -license accept
 
     success "Xcode Command Line Tools installed successfully"
@@ -69,7 +75,7 @@ install_xcode() {
 
 # Install Homebrew
 install_homebrew() {
-    info "Installing Homebrew package manager..."
+    header "Homebrew Package Manager"
 
     # Set default Homebrew installation options
     export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
@@ -80,24 +86,24 @@ install_homebrew() {
         warning "Homebrew is already installed"
 
         # Update Homebrew to ensure it's current
-        info "Updating Homebrew..."
+        step "Updating Homebrew..."
         brew update
         success "Homebrew updated successfully"
         return 0
     fi
 
     # Validate sudo credentials before running installer
-    info "Preparing for installation (may require password)..."
+    step "Preparing for installation (may require password)..."
     sudo --validate
 
     # Run Homebrew installer
-    info "Running Homebrew installer (this may take a while)..."
+    step "Running Homebrew installer (this may take a while)..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # Add Homebrew to PATH for ARM Macs if needed
-    if [[ "${IS_ARM:-false}" == true ]]; then
+    if [[ "$IS_ARM" == true ]]; then
         if [[ -d "/opt/homebrew/bin" ]]; then
-            info "Configuring Homebrew PATH for Apple Silicon..."
+            step "Configuring Homebrew PATH for Apple Silicon..."
 
             # Check which shell the user is using
             local shell_profile
@@ -116,11 +122,16 @@ install_homebrew() {
             # Add Homebrew to PATH if not already there
             if ! grep -q "/opt/homebrew/bin" "$shell_profile" 2>/dev/null; then
                 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$shell_profile"
-                info "Added Homebrew to your $shell_profile"
+                note "Added Homebrew to your $shell_profile"
             fi
 
-            # Set for current session
-            eval "$(/opt/homebrew/bin/brew shellenv)"
+            # Set for current session (make sure this executes in the current shell)
+            if [[ -f "/opt/homebrew/bin/brew" ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      export PATH="/opt/homebrew/bin:$PATH"
+      step "Added /opt/homebrew/bin to PATH for current session"
+      echo "Current PATH: $PATH"
+    fi
         fi
     fi
 
@@ -129,7 +140,7 @@ install_homebrew() {
 
 # Main function
 install_prerequisites() {
-    info "Starting macOS prerequisites setup..."
+    header "macOS Prerequisites Setup"
 
     # Detect Mac architecture
     detect_architecture
@@ -139,5 +150,11 @@ install_prerequisites() {
     install_homebrew
 
     success "Prerequisites setup completed successfully!"
-    info "You can now install packages using 'brew install <package>'"
+    note "You can now install packages using 'brew install <package>'"
 }
+
+# Check if this script is being sourced or executed directly
+if [[ "${(%):-%N}" == "$0" && -z "${SOURCED_ONLY:-}" ]]; then
+    # Script was executed directly, run the main function
+    install_prerequisites
+fi
